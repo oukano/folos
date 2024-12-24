@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
 import CategoryModal from './CategoryModal'; // Import CategoryModal
-import { db } from '../services/firebase'; // Firestore
+import { db, storage } from '../services/firebase'; // Firestore
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import RecordRTC from 'recordrtc';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ExpenseForm = () => {
   const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('Category');
   const [image, setImage] = useState(null);
   const [audio, setAudio] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -28,7 +29,7 @@ const ExpenseForm = () => {
 
       // Reset form after submission
       setPrice('');
-      setCategory('');
+      setCategory('Category');
       setImage(null);
       setAudio(null);
       setAudioUrl(null);
@@ -45,11 +46,26 @@ const ExpenseForm = () => {
     setShowModal(false); // Close the modal when a category is selected
   };
 
+    const uploadImage = async (file) => {
+    try {
+      const storageRef = ref(storage, `images/${file.name}`); // Create a reference
+      const snapshot = await uploadBytes(storageRef, file); // Upload file
+      const downloadURL = await getDownloadURL(snapshot.ref); // Get the file's download URL
+      console.log("File uploaded successfully. URL:", downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
+  };
+
   // Function to handle image selection (either camera or gallery)
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // Display the image preview
+        uploadImage(file).then((url) => {
+            setImage(URL.createObjectURL(file)); // Display the image preview
+        });
     }
   };
 
@@ -75,16 +91,17 @@ const ExpenseForm = () => {
   // Stop recording and save the audio
   const stopRecording = () => {
     if (recorderRef.current) {
-      recorderRef.current.stopRecording(() => {
-        const audioUrl = URL.createObjectURL(recorderRef.current.blob);  // Create a URL for the recorded audio
-        setAudio(audioUrl);  // Store the audio URL for playback
-        setIsRecording(false);  // Update recording state
-
-        // Stop the media stream to release microphone
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(track => track.stop());
-        }
-      });
+        recorderRef.current.stopRecording(() => {
+            const blob = recorderRef.current.getBlob(); // Safely retrieve the blob
+            const audioUrl = URL.createObjectURL(blob); // Create a URL from the blob
+            setAudio(audioUrl);
+            setIsRecording(false);
+          
+            // Stop the media stream
+            if (streamRef.current) {
+              streamRef.current.getTracks().forEach(track => track.stop());
+            }
+        });
     }
   };
 
@@ -98,7 +115,7 @@ const ExpenseForm = () => {
       />
       
       {/* Button to show the Category Modal */}
-      <button onClick={() => setShowModal(true)}>Categories</button>
+      <button onClick={() => setShowModal(true)}>{category}</button>
 
       {/* Conditionally render the CategoryModal */}
       {showModal && (

@@ -14,6 +14,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+
   }
   
   .App {
@@ -187,3 +188,28 @@
     }
   }
   
+
+  @media screen and (max-width: 640px) {
+    body, html {
+      padding: 0px;
+      display: block;
+
+    }
+
+    .App {
+      max-width: 500px;
+      width: 70%;
+      margin: 0 auto;   
+    }
+
+    input[type="number"] {
+        padding: 12px;
+        margin: 0 auto;
+        font-size: 56px;
+        width: 52%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition: all 0.3s ease-in-out;
+    }
+  }

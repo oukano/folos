@@ -1,0 +1,189 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body and App container */
+  body, html {
+    font-family: 'Arial', sans-serif;
+    height: 100%;
+    background-color: #f4f7fb; /* Light gray background for calm feel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 40px;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+  }
+  
+  /* Expense Form styles */
+  .expense-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spacing between inputs and buttons */
+  }
+  
+  input[type="number"] {
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  input[type="number"]:focus {
+    border-color: #007bff; /* Blue border when focused */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Light blue glow */
+  }
+  
+  button {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    width: 100%;
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  button:disabled {
+    background-color: #d6d6d6; /* Disabled button state */
+    cursor: not-allowed;
+  }
+  
+  /* Icon buttons styling */
+  button > svg,
+  button > span {
+    margin-right: 8px; /* Spacing between icon and text */
+  }
+  
+  button > svg {
+    font-size: 20px; /* Larger size for icons */
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  .categories-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+  
+  .categories-btn:hover {
+    background-color: #e6f1ff; /* Light blue background on hover */
+  }
+  
+  /* Category Modal styling */
+  .category-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Above other content */
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .category-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 350px;
+    text-align: center;
+    animation: scaleUp 0.3s ease-out;
+  }
+  
+  .category-modal ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .category-modal li {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+  }
+  
+  .category-modal li:hover {
+    background-color: #f1f1f1; /* Light gray hover effect */
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close-btn:hover {
+    color: #333; /* Darker color on hover */
+  }
+  
+  /* Animation for modal entrance */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Animation for modal scale up */
+  @keyframes scaleUp {
+    from {
+      transform: scale(0.95);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  

@@ -1,4 +1,7 @@
 /* Global Reset */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +10,7 @@
   
   /* Body and App container */
   body, html {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
     height: 100%;
     background-color: #f4f7fb; /* Light gray background for calm feel */
     display: flex;
@@ -28,7 +31,7 @@
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    padding: 40px;
+    padding: 40px 20px;
     box-sizing: border-box;
     transition: all 0.3s ease-in-out;
   }
@@ -40,65 +43,6 @@
     font-weight: 600;
   }
   
-  /* Expense Form styles */
-  .expense-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Spacing between inputs and buttons */
-    justify-content: center;
-
-  }
-  
-  input[type="number"] {
-    padding: 12px;
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  input[type="number"]:focus {
-    border-color: #007bff; /* Blue border when focused */
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Light blue glow */
-  }
-  
-  button {
-    padding: 18px;
-    font-size: 25px;
-    background-color: #007bff; /* Blue background */
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    width: 100%;
-  }
-  
-  button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  button:disabled {
-    background-color: #d6d6d6; /* Disabled button state */
-    cursor: not-allowed;
-  }
-  
-  /* Icon buttons styling */
-  button > svg,
-  button > span {
-    margin-right: 8px; /* Spacing between icon and text */
-  }
-  
-  button > svg {
-    font-size: 20px; /* Larger size for icons */
-  }
-  
-  button:focus {
-    outline: none;
-  }
   
   .categories-btn {
     display: flex;
@@ -129,12 +73,11 @@
   
   .category-modal {
     background-color: white;
-    padding: 20px;
+    padding: 35px 20px;
     position: relative;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 80%;
-    max-width: 350px;
+    width: 90%;
     text-align: center;
     animation: scaleUp 0.3s ease-out;
   }
@@ -202,30 +145,5 @@
     .App {
       max-width: 500px;
       margin: 0 auto;   
-    }
-
-    input[type="number"] {
-        padding: 12px;
-        margin: 0 auto;
-        font-size: 56px;
-        width: 90%;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        outline: none;
-        transition: all 0.3s ease-in-out;
-        text-align: center;
-    }
-
-    input::placeholder {
-        text-align: center; /* Ensures placeholder text is also centered */
-        color: #999; /* Optional: Placeholder text color */
-      }
-
-    .multimedia {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
     }
   }

@@ -1,0 +1,104 @@
+/* Expense Form styles */
+.expense-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between inputs and buttons */
+  justify-content: center;
+
+}
+
+.mainInput{
+  display: flex;
+}
+
+input[type="number"] {
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="number"]:focus {
+  border-color: #007bff; /* Blue border when focused */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Light blue glow */
+}
+
+button {
+  padding: 18px;
+  font-size: 25px;
+  background-color: #007bff; /* Blue background */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+button:disabled {
+  background-color: #d6d6d6; /* Disabled button state */
+  cursor: not-allowed;
+}
+
+/* Icon buttons styling */
+button > svg,
+button > span {
+  margin-right: 8px; /* Spacing between icon and text */
+}
+
+button > svg {
+  font-size: 20px; /* Larger size for icons */
+}
+
+button:focus {
+  outline: none;
+}
+
+textarea {
+  padding: 12px 8px;
+  font-size: 18px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+  margin-right: 12px;
+}
+
+@media screen and (max-width: 640px) {
+
+  input[type="number"] {
+    padding: 0 12px;
+    margin: 0 auto;
+    font-size: 76px;
+    font-weight: bold;
+    width: 70%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+  }
+
+  input::placeholder {
+      text-align: center; /* Ensures placeholder text is also centered */
+      color: #999; /* Optional: Placeholder text color */
+    }
+
+  .multimedia {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+}

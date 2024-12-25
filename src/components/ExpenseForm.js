@@ -1,45 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CategoryModal from './CategoryModal'; // Import CategoryModal
 import { db } from '../services/firebase'; // Firestore
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 // import RecordRTC from 'recordrtc';
 // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import './ExpenseForm.css';
 
 const ExpenseForm = () => {
   const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('Category');
+  const [category, setCategory] = useState({name: 'Category'});
+  const [categories, setCategories] = useState([]);
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [note, setNote] = useState('');
 //   const [image, setImage] = useState(null);
 //   const [audio, setAudio] = useState(null);
 //   const [audioUrl, setAudioUrl] = useState(null);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
 //   const [isRecording, setIsRecording] = useState(false);
-  const [note, setNote] = useState('');
 //   const recorderRef = useRef(null);  // To store the recorder instance
 //   const streamRef = useRef(null); 
 
   // Function to handle form submission
   const handleSubmit = async () => {
-    try {
-      await addDoc(collection(db, 'expenses'), {
-        price,
-        note,
-        category,
-        // image,
-        // audioUrl, // Send audio URL (or Blob, depending on your setup)
-        timestamp: serverTimestamp(),
-      });
 
-      // Reset form after submission
-      setPrice('');
-      setNote('');
-      setCategory('Category');
-    //   setImage(null);
-    //   setAudio(null);
-    //   setAudioUrl(null);
-      alert("Expense added successfully!");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      alert("Error adding expense.");
+    if (price.trim() !== "") {
+      const selectedDate = date ? new Date(date) : new Date();
+      try {
+        await addDoc(collection(db, 'expenses'), {
+          price,
+          note,
+          category: category.id,
+          date: selectedDate,
+          // image,
+          // audioUrl, // Send audio URL (or Blob, depending on your setup)
+          timestamp: serverTimestamp(),
+        });
+
+        // Reset form after submission
+        setPrice('');
+        setNote('');
+        setCategory({name: 'Category'});
+      //   setImage(null);
+      //   setAudio(null);
+      //   setAudioUrl(null);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+        alert("Error adding expense.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "categories"));
+        const fetchedCategories = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Error fetching categories: ", error);
+      }
+    };
+
+    fetchCategories(); // Fetch categories only when modal is open
+  }, [categories]);
+   // Add a new category
+   const addCategory = async (newCategory) => {
+    if (newCategory.trim() === "") return alert("Category name cannot be empty");
+
+    try {
+      const docRef = await addDoc(collection(db, "categories"), { name: newCategory.trim() });
+      setCategories([...categories, { id: docRef.id, name: newCategory.trim() }]); // Update local list
+    } catch (error) {
+      console.error("Error adding category: ", error);
     }
   };
 
@@ -110,21 +145,31 @@ const ExpenseForm = () => {
 
   return (
     <div className="expense-form">
+      <div className='mainInput'>
       <input 
         type="number" 
-        placeholder="price" 
+        placeholder="MAD" 
         value={price} 
         onChange={(e) => setPrice(e.target.value)} 
       />
-      
+      <input
+          type="date"
+          id="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+        </div>
       {/* Button to show the Category Modal */}
-      <button onClick={() => setShowModal(true)}>{category}</button>
+      <button onClick={() => setShowModal(true)}>{category.name}</button>
 
       {/* Conditionally render the CategoryModal */}
       {showModal && (
         <CategoryModal 
           onClose={() => setShowModal(false)} // Close modal when clicked outside or via a close button
           onSelectCategory={handleCategorySelect} 
+          addCategory={addCategory}
+          categories={categories}
         />
       )}
 

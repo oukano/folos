@@ -7,6 +7,19 @@
   margin: 20px auto;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header button {
+  width: 40px;
+  padding: 5px;
+}
+
+.header svg {
+  margin-right: 0px;
+}
 .expense-list h2 {
   text-align: center;
   margin-bottom: 0px;
@@ -49,4 +62,84 @@
 .toggle-button{
   margin: 0 auto;
   width: auto;
+}
+
+.delete-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.3s ease-out;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.expense-table {
+  transition: max-height 0.3s ease-out;
+  max-height: 1000px;
+  overflow: hidden;
+}
+
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.confirm-button,
+.cancel-button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #218838;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
 }

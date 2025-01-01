@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { FaArrowDown, FaArrowUp, FaTrashAlt, FaSync } from "react-icons/fa";
+import Papa from "papaparse";
+import { FaArrowDown, FaArrowUp, FaTrashAlt, FaSync, FaFileExcel } from "react-icons/fa";
 import "./ExpenseList.css";
 
 const ExpenseList = () => {
@@ -19,22 +20,68 @@ const ExpenseList = () => {
 
   const fetchExpenses = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "expenses"));
-      const expenseList = querySnapshot.docs.map((doc) => ({
+      const expenseSnapshot = await getDocs(collection(db, "expenses"));
+      const categorySnapshot = await getDocs(collection(db, "categories"));
+
+      // Extract data from Firestore documents
+      const fetchedExpenses = expenseSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      // Sort expenses by date in ascending order
-      const sortedExpenses = expenseList.sort((a, b) => {
-        const dateA = new Date(a.date.seconds); // Convert string to Date object
-        const dateB = new Date(b.date.seconds);
-        return dateA - dateB; // Sort by date (earliest first)
+
+      const fetchedCategories = categorySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log(fetchedCategories);
+
+      // Map category names into expenses
+      const combinedExpenses = fetchedExpenses.map((expense) => {
+        const category = fetchedCategories.find((cat) => cat.id === expense.category);
+      console.log(fetchedCategories);
+
+        return {
+          ...expense,
+          categoryName: category ? category.name : "Unknown", // Default to "Unknown" if no match
+        };
       });
+
+      // Sort expenses by date
+      const sortedExpenses = combinedExpenses.sort((a, b) => {
+        const dateA = new Date(a.date.seconds * 1000);
+        const dateB = new Date(b.date.seconds * 1000);
+        return dateA - dateB;
+      });
+
       setExpenses(sortedExpenses);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching expenses:", error);
+      console.error("Error fetching data:", error);
     }
+  };
+
+  const exportToCSV = () => {
+    const csvData = expenses.map((expense) => ({
+      Price: expense.price,
+      Date: new Date(expense.date.seconds * 1000).toLocaleDateString("en-GB"),
+      Note: expense.note || "",
+      Category: expense.categoryName || "Unknown",
+    }));
+
+    const csv = Papa.unparse(csvData);
+
+    // Create a downloadable file
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + parseFloat(expense.price), 0);
@@ -79,6 +126,7 @@ const ExpenseList = () => {
     <div className="expense-list">
       <div className="header" >
       <h2>All Expenses: {totalExpenses} MAD</h2>
+
       <button onClick={refreshExpenses} className="refresh-button">
           <FaSync size={20} />
         </button>
@@ -111,7 +159,7 @@ const ExpenseList = () => {
         style={{
           transition: "max-height 0.3s ease-out",
           maxHeight: isExpanded ? "1000px" : "0", // Toggle height for smooth collapse/expand
-          overflow: "hidden",
+          overflow: "scroll",
         }}
         className="expense-table"
       >
@@ -148,9 +196,13 @@ const ExpenseList = () => {
             )}
           </div>
         ))}
+        
       </div>
       )
       }
+      <button onClick={exportToCSV} className="export-button">
+          <FaFileExcel />
+        </button>
       {/* Confirmation dialog */}
       {isConfirming && expenseToDelete && (
         <div className="confirmation-modal">
